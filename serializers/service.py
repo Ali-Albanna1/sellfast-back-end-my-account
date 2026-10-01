@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, ConfigDict, Field, root_validator
 from typing import Optional
 
 class ServiceSchema(BaseModel):
@@ -11,8 +11,7 @@ class ServiceSchema(BaseModel):
     is_available: bool
     image: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
     @root_validator(skip_on_failure=True)
     def validate_price_range(cls, values):

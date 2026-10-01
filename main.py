@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from database import migrate_service_price_range
 
 # Controllers
 from controllers.users import router as UserRouter
@@ -13,6 +14,11 @@ from controllers.bookings import router as BookingRouter
 
 
 app = FastAPI()
+
+
+@app.on_event("startup")
+def migrate_database():
+    migrate_service_price_range()
 
 # CORS ✅ Allow your React dev server(s) to call the API
 origins = [
