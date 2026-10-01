@@ -14,7 +14,7 @@ class ServiceSchema(BaseModel):
     class Config:
         orm_mode = True
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def validate_price_range(cls, values):
         if values.get("price_min") is not None and values.get("price_max") is not None and values["price_max"] < values["price_min"]:
             raise ValueError("price_max must be greater than or equal to price_min")
@@ -29,7 +29,7 @@ class ServiceCreateSchema(BaseModel):
     is_available: bool = True
     image: Optional[str] = None
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def validate_price_range(cls, values):
         if values.get("price_min") is not None and values.get("price_max") is not None and values["price_max"] < values["price_min"]:
             raise ValueError("price_max must be greater than or equal to price_min")
@@ -46,7 +46,7 @@ class ServiceUpdateSchema(BaseModel):
     is_available: bool
     image: Optional[str] = None
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def validate_price_range(cls, values):
         if values.get("price_min") is not None and values.get("price_max") is not None and values["price_max"] < values["price_min"]:
             raise ValueError("price_max must be greater than or equal to price_min")
