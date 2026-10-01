@@ -47,6 +47,16 @@ def migrate_service_price_range():
                     END)
             """))
 
+            missing_ranges = connection.execute(text("""
+                SELECT COUNT(*)
+                FROM services
+                WHERE price_min IS NULL OR price_max IS NULL
+            """)).scalar_one()
+            if missing_ranges:
+                raise RuntimeError("Cannot remove legacy service prices before all ranges are populated")
+
+            connection.execute(text("ALTER TABLE services DROP COLUMN price"))
+
 def get_db():
     db = SessionLocal()
     try:
